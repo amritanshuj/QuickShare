@@ -4,6 +4,8 @@ const path = require('path');
 
 const PORT = process.env.PORT || 3000;
 
+app.use(express.static('public'));
+
 const connectDB = require('./config/db');
 connectDB();  
 
@@ -14,7 +16,7 @@ app.set('view engine', 'ejs');
 //Routes
 app.use('/api/files', require('./routes/files'))
 app.use('/files', require('./routes/show'));
-
+app.use('/files/download', require('./routes/download'));
 
 app.listen(PORT, function(err){
     if(err){
