@@ -30,7 +30,7 @@ browseBtn.addEventListener("click", () => {
 const uploadFile = () => {
   console.log("file added uploading");
 
-  files = fileInput.files;
+  const files = fileInput.files;
   const formData = new FormData();
   formData.append("myfile", files[0]);
 
@@ -71,7 +71,7 @@ const uploadFile = () => {
 dropZone.addEventListener("drop", (e) => {
   e.preventDefault();
   //   console.log("dropped", e.dataTransfer.files[0].name);
-  const files = e.dataTransfer.files;
+  files = e.dataTransfer.files[0];
   console.log('***:', files);
   if (files.length === 1) {
     if (files[0].size < maxAllowedSize) {
