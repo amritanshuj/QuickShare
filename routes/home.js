@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const File = require('../models/file');
 
-router.get('/api/files', async (req, res) => {
+router.get('/', async (req, res) => {
     try{
         return res.render('home');
 

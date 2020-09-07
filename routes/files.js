@@ -19,7 +19,7 @@ let upload = multer({
 }).single('myfile');
 
 
-router.post('/upload', (req, res) => {
+router.post('/api/files', (req, res) => {
     
 
     //Store file
