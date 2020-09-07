@@ -124,7 +124,7 @@ const onFileUploadSuccess = (res) => {
   emailForm[2].innerText = "Send";
   progressContainer.style.display = "none"; // hide the box
 
-  const { files: url } = JSON.parse(res);
+  const { files[0]: url } = JSON.parse(res);
   console.log(url);
   sharingContainer.style.display = "block";
   fileURL.value = url;
