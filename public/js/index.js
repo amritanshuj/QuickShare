@@ -30,7 +30,7 @@ browseBtn.addEventListener("click", () => {
 const uploadFile = () => {
   console.log("file added uploading");
 
-  const files = fileInput.files;
+  files = fileInput.files;
   const formData = new FormData();
   formData.append("myfile", files[0]);
 
