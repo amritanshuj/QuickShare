@@ -13,105 +13,164 @@ const copyBtn = document.querySelector("#copyBtn");
 
 const emailForm = document.querySelector("#emailForm");
 
-const host = "https://sharequick.herokuapp.com/";
-const uploadURL = host + "api/files";
-const emailURL = `${host}api/files/send`;
-// const uploadURL = `${host} + api/files`
-dropZone.addEventListener("dragover", (e) => {
-    e.preventDefault();
-    if (!dropZone.classList.contains("dragged")) {
+const toast = document.querySelector(".toast");
 
-        dropZone.classList.add("dragged");
-    }
+const baseURL = "https://sharequick.herokuapp.com";
+const uploadURL = `${baseURL}/api/files`;
+const emailURL = `${baseURL}/api/files/send`;
+
+const maxAllowedSize = 100 * 1024 * 1024; //100mb
+
+
+browseBtn.addEventListener("click", () => {
+  fileInput.click();
 });
 
 dropZone.addEventListener("drop", (e) => {
-    e.preventDefault();
-    dropZone.classList.remove("dragged");
-    const files = e.dataTransfer.files[0];
-    console.log(files);
-        fileInput.files = new FileListItems(files);
-        uploadFile()
+  e.preventDefault();
+  //   console.log("dropped", e.dataTransfer.files[0].name);
+  const files = e.dataTransfer.files;
+  console.log('***:', files);
+  if (files.length === 1) {
+    if (files[0].size < maxAllowedSize) {
+      fileInput.files = files;
+      uploadFile();
+    } else {
+      showToast("Max file size is 100MB");
+    }
+  } else if (files.length > 1) {
+    showToast("You can't upload multiple files");
+  }
+  dropZone.classList.remove("dragged");
 });
 
-copyBtn.addEventListener("click", () => {
-    fileURLInput.select()
-    document.execCommand("copy")
-})
+dropZone.addEventListener("dragover", (e) => {
+  e.preventDefault();
+  dropZone.classList.add("dragged");
 
+  // console.log("dropping file");
+});
+
+dropZone.addEventListener("dragleave", (e) => {
+  dropZone.classList.remove("dragged");
+
+  console.log("drag ended");
+});
+
+// file input change and uploader
 fileInput.addEventListener("change", () => {
-    uploadFile()
-})
-
-browseBtn.addEventListener("click", () => {
-    fileInput.click()
+  if (fileInput.files[0].size > maxAllowedSize) {
+    showToast("Max file size is 100MB");
+    fileInput.value = ""; // reset the input
+    return;
+  }
+  uploadFile();
 });
 
+// sharing container listenrs
+copyURLBtn.addEventListener("click", () => {
+  fileURL.select();
+  document.execCommand("copy");
+  showToast("Copied to clipboard");
+});
+
+fileURL.addEventListener("click", () => {
+  fileURL.select();
+});
 
 const uploadFile = () => {
-    progressContainer.style.display = "block";
-    const file = fileInput.files[0];
-    console.log('**$$**: ',file);
-    const formData = new FormData();
-    formData.append("myfile", file);
+  console.log("file added uploading");
 
-    const xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = () => {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            console.log(xhr.response);
-            onUploadSuccess(JSON.parse(xhr.response))
-        }
-    };
+  files = fileInput.files;
+  const formData = new FormData();
+  formData.append("myfile", files[0]);
 
-    xhr.upload.onprogress = updateProgress;
+  //show the uploader
+  progressContainer.style.display = "block";
 
-    xhr.open("POST", uploadURL);
-    xhr.send(formData)
+  // upload file
+  const xhr = new XMLHttpRequest();
+
+  // listen for upload progress
+  xhr.upload.onprogress = function (event) {
+    // find the percentage of uploaded
+    let percent = Math.round((100 * event.loaded) / event.total);
+    progressPercent.innerText = percent;
+    const scaleX = `scaleX(${percent / 100})`;
+    bgProgress.style.transform = scaleX;
+    progressBar.style.transform = scaleX;
+  };
+
+  // handle error
+  xhr.upload.onerror = function () {
+    showToast(`Error in upload: ${xhr.status}.`);
+    fileInput.value = ""; // reset the input
+  };
+
+  // listen for response which will give the link
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState == XMLHttpRequest.DONE) {
+      onFileUploadSuccess(xhr.responseText);
+    }
+  };
+
+  xhr.open("POST", uploadURL);
+  xhr.send(formData);
 };
 
-const updateProgress = (e) => {
-    const percent = Math.round((e.loaded / e.total) * 100);
-    // console.log(percent);
-    bgProgress.style.width = `${percent}%`;
-    percentDiv.innerText = percent;
-    progressBar.style.transform = `scaleX(${percent / 100})`
-};
+const onFileUploadSuccess = (res) => {
+  fileInput.value = ""; // reset the input
+  status.innerText = "Uploaded";
 
-const onUploadSuccess = ({ file: url }) => {
-    console.log(url);
-    fileInput.value = "";
-    emailForm[2].removeAttribute("disabled");
-    progressContainer.style.display = "none";
-    sharingContainer.style.display = "block";
-    fileURLInput.value = url;
+  // remove the disabled attribute from form btn & make text send
+  emailForm[2].removeAttribute("disabled");
+  emailForm[2].innerText = "Send";
+  progressContainer.style.display = "none"; // hide the box
+
+  const { file: url } = JSON.parse(res);
+  console.log(url);
+  sharingContainer.style.display = "block";
+  fileURL.value = url;
 };
 
 emailForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    console.log("Submit form");
-    const url = fileURLInput.value;
-    const formData = {
-        uuid: url.split("/").splice(-1, 1)[0],
-        emailTo: emailForm.elements["to-email"].value,
-        emailForm: emailForm.elements["from-email"].value,
-    };
-    emailForm[2].setAttribute("disabled", "true");
-    console.table(formData);
+  e.preventDefault(); // stop submission
 
+  // disable the button
+  emailForm[2].setAttribute("disabled", "true");
+  emailForm[2].innerText = "Sending";
 
+  const url = fileURL.value;
 
-    fetch(emailURL, {
-
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-    })
-        .then((res) => res.json())
-        .then(({success}) => {
-            if (success) {
-                sharingContainer.style.display = "none";
-            }
-        });
+  const formData = {
+    uuid: url.split("/").splice(-1, 1)[0],
+    emailTo: emailForm.elements["to-email"].value,
+    emailFrom: emailForm.elements["from-email"].value,
+  };
+  console.log(formData);
+  fetch(emailURL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(formData),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success) {
+        showToast("Email Sent");
+        sharingContainer.style.display = "none"; // hide the box
+      }
+    });
 });
+
+let toastTimer;
+// the toast function
+const showToast = (msg) => {
+  clearTimeout(toastTimer);
+  toast.innerText = msg;
+  toast.classList.add("show");
+  toastTimer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2000);
+};
