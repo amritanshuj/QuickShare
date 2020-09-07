@@ -52,9 +52,9 @@ browseBtn.addEventListener("click", () => {
 
 const uploadFile = () => {
     progressContainer.style.display = "block";
-    const file = fileInput.files[0]
-    const formData = new FormData()
-    formData.append("myfile", file)
+    const file = fileInput.files[0];
+    const formData = new FormData();
+    formData.append("myfile", file);
 
     const xhr = new XMLHttpRequest();
     xhr.onreadystatechange = () => {
