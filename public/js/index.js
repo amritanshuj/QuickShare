@@ -30,7 +30,7 @@ dropZone.addEventListener("drop", (e) => {
     dropZone.classList.remove("dragged");
     const files = e.dataTransfer.files[0];
     console.log(files);
-        fileInput.files = files;
+        fileInput.files = new FileListItems(files);
         uploadFile()
 });
 
