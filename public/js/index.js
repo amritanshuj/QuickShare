@@ -71,7 +71,7 @@ const uploadFile = () => {
 dropZone.addEventListener("drop", (e) => {
   e.preventDefault();
   //   console.log("dropped", e.dataTransfer.files[0].name);
-  files = e.dataTransfer.files;
+  files = e.dataTransfer.files[0];
   console.log('***:', files);
   if (files.length === 1) {
     if (files[0].size < maxAllowedSize) {
