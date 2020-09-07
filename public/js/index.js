@@ -28,7 +28,7 @@ dropZone.addEventListener("dragover", (e) => {
 dropZone.addEventListener("drop", (e) => {
     e.preventDefault();
     dropZone.classList.remove("dragged");
-    const files = e.dataTransfer.files;
+    const files = e.dataTransfer.files[0];
     console.log(files);
     if (files.length) {
         fileInput.files = files;
@@ -53,6 +53,7 @@ browseBtn.addEventListener("click", () => {
 const uploadFile = () => {
     progressContainer.style.display = "block";
     const file = fileInput.files[0];
+    console.log('**$$**: ',file);
     const formData = new FormData();
     formData.append("myfile", file);
 
