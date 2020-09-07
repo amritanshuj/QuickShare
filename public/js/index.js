@@ -1,5 +1,5 @@
 const dropZone = document.querySelector(".drop-zone");
-const browseBtn = document.querySelector(".browseBtn");
+const browseBtn = document.querySelector("#browseBtn");
 const fileInput = document.querySelector("#fileInput");
 
 
