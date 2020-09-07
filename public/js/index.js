@@ -1,7 +1,6 @@
 const dropZone = document.querySelector(".drop-zone");
-const browseBtn = document.querySelector("#browseBtn");
 const fileInput = document.querySelector("#fileInput");
-
+const browseBtn = document.querySelector("#browseBtn");
 
 const progressContainer = document.querySelector(".progress-container");
 const bgProgress = document.querySelector(".bg-progress");
