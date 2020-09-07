@@ -78,9 +78,9 @@ fileURL.addEventListener("click", () => {
 const uploadFile = () => {
   console.log("file added uploading");
 
-  files = fileInput.files;
+  const file = fileInput.files[0];
   const formData = new FormData();
-  formData.append("myfile", files[0]);
+  formData.append("myfile", file);
 
   //show the uploader
   progressContainer.style.display = "block";
@@ -124,7 +124,7 @@ const onFileUploadSuccess = (res) => {
   emailForm[2].innerText = "Send";
   progressContainer.style.display = "none"; // hide the box
 
-  const { files[0]: url } = JSON.parse(res);
+  const { file: url } = JSON.parse(res);
   console.log(url);
   sharingContainer.style.display = "block";
   fileURL.value = url;
