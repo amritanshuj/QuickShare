@@ -3,9 +3,7 @@ const File = require('../models/file');
 
 router.get('/', async (req, res) => {
     try{
-        return res.render('home', {
-            file: File
-        });
+        return res.render('home');
 
     } catch(err){
         return res.render('home', {error: 'Something went wrong'});
