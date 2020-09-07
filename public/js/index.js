@@ -29,11 +29,9 @@ dropZone.addEventListener("drop", (e) => {
     e.preventDefault();
     dropZone.classList.remove("dragged");
     const files = e.dataTransfer.files[0];
-    console.log(files, files.length);
-    if (files.length>0) {
+    console.log(files);
         fileInput.files = files;
         uploadFile()
-    }
 });
 
 copyBtn.addEventListener("click", () => {
