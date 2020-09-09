@@ -8,7 +8,7 @@ const progressBar = document.querySelector(".progress-bar");
 const percentDiv = document.querySelector("#percent");
 
 const sharingContainer = document.querySelector(".sharing-container");
-const fileURLInput = document.querySelector("#fileURL");
+const fileURL = document.querySelector("#fileURL");
 const copyBtn = document.querySelector("#copyBtn");
 
 const emailForm = document.querySelector("#emailForm");
@@ -77,9 +77,10 @@ fileURL.addEventListener("click", () => {
 });
 
 const uploadFile = () => {
-  console.log("file added uploading");
+  console.log("file added uploading:", files[0]);
 
   files = fileInput.files;
+
   const formData = new FormData();
   formData.append("myfile", files[0]);
 
