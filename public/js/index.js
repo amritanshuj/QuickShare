@@ -5,11 +5,11 @@ const browseBtn = document.querySelector("#browseBtn");
 const progressContainer = document.querySelector(".progress-container");
 const bgProgress = document.querySelector(".bg-progress");
 const progressBar = document.querySelector(".progress-bar");
-const percentDiv = document.querySelector("#percent");
+const status = document.querySelector('.status');
 
 const sharingContainer = document.querySelector(".sharing-container");
 const fileURL = document.querySelector("#fileURL");
-const copyBtn = document.querySelector("#copyBtn");
+const copyUrlBtn = document.querySelector("#copyUrlBtn");
 
 const emailForm = document.querySelector("#emailForm");
 
@@ -94,7 +94,7 @@ const uploadFile = () => {
   xhr.upload.onprogress = function (event) {
     // find the percentage of uploaded
     let percent = Math.round((100 * event.loaded) / event.total);
-    progressPercent.innerText = percent;
+    progressPercent.innerText = percentDiv;
     const scaleX = `scaleX(${percent / 100})`;
     bgProgress.style.transform = scaleX;
     progressBar.style.transform = scaleX;
