@@ -21,58 +21,14 @@ const emailURL = `${baseURL}/api/files/send`;
 
 const maxAllowedSize = 100 * 1024 * 1024; //100mb
 
-
 browseBtn.addEventListener("click", () => {
   fileInput.click();
 });
 
-
-const uploadFile = () => {
-  console.log("file added uploading");
-
-  const files = fileInput.files;
-  const formData = new FormData();
-  formData.append("myfile", files[0]);
-
-  //show the uploader
-  progressContainer.style.display = "block";
-
-  // upload file
-  const xhr = new XMLHttpRequest();
-
-  // listen for upload progress
-  xhr.upload.onprogress = function (event) {
-    // find the percentage of uploaded
-    let percent = Math.round((100 * event.loaded) / event.total);
-    percentDiv.innerText = percent;
-    const scaleX = `scaleX(${percent / 100})`;
-    bgProgress.style.transform = scaleX;
-    progressBar.style.transform = scaleX;
-  };
-
-  // handle error
-  xhr.upload.onerror = function () {
-    showToast(`Error in upload: ${xhr.status}.`);
-    fileInput.value = ""; // reset the input
-  };
-
-  // listen for response which will give the link
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState == XMLHttpRequest.DONE) {
-      onFileUploadSuccess(xhr.responseText);
-    }
-  };
-
-  xhr.open("POST", uploadURL);
-  xhr.send(formData);
-};
-
-
 dropZone.addEventListener("drop", (e) => {
   e.preventDefault();
   //   console.log("dropped", e.dataTransfer.files[0].name);
-  files = e.dataTransfer.files;
-  console.log('***:', files[0]);
+  const files = e.dataTransfer.files;
   if (files.length === 1) {
     if (files[0].size < maxAllowedSize) {
       fileInput.files = files;
@@ -109,6 +65,56 @@ fileInput.addEventListener("change", () => {
   uploadFile();
 });
 
+// sharing container listenrs
+copyURLBtn.addEventListener("click", () => {
+  fileURL.select();
+  document.execCommand("copy");
+  showToast("Copied to clipboard");
+});
+
+fileURL.addEventListener("click", () => {
+  fileURL.select();
+});
+
+const uploadFile = () => {
+  console.log("file added uploading");
+
+  files = fileInput.files;
+  const formData = new FormData();
+  formData.append("myfile", files[0]);
+
+  //show the uploader
+  progressContainer.style.display = "block";
+
+  // upload file
+  const xhr = new XMLHttpRequest();
+
+  // listen for upload progress
+  xhr.upload.onprogress = function (event) {
+    // find the percentage of uploaded
+    let percent = Math.round((100 * event.loaded) / event.total);
+    progressPercent.innerText = percent;
+    const scaleX = `scaleX(${percent / 100})`;
+    bgProgress.style.transform = scaleX;
+    progressBar.style.transform = scaleX;
+  };
+
+  // handle error
+  xhr.upload.onerror = function () {
+    showToast(`Error in upload: ${xhr.status}.`);
+    fileInput.value = ""; // reset the input
+  };
+
+  // listen for response which will give the link
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState == XMLHttpRequest.DONE) {
+      onFileUploadSuccess(xhr.responseText);
+    }
+  };
+
+  xhr.open("POST", uploadURL);
+  xhr.send(formData);
+};
 
 const onFileUploadSuccess = (res) => {
   fileInput.value = ""; // reset the input
@@ -119,25 +125,11 @@ const onFileUploadSuccess = (res) => {
   emailForm[2].innerText = "Send";
   progressContainer.style.display = "none"; // hide the box
 
-  console.log(res);
-  const {file:url} = JSON.parse(res);
-  
+  const { file: url } = JSON.parse(res);
+  console.log(url);
   sharingContainer.style.display = "block";
   fileURL.value = url;
 };
-
-
-// sharing container listenrs
-copyBtn.addEventListener("click", () => {
-  fileURL.select();
-  document.execCommand("copy");
-  showToast("Copied to clipboard");
-});
-
-fileURL.addEventListener("click", () => {
-  fileURL.select();
-});
-
 
 emailForm.addEventListener("submit", (e) => {
   e.preventDefault(); // stop submission
@@ -180,3 +172,4 @@ const showToast = (msg) => {
     toast.classList.remove("show");
   }, 2000);
 };
+
