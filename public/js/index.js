@@ -9,7 +9,7 @@ const status = document.querySelector('.status');
 
 const sharingContainer = document.querySelector(".sharing-container");
 const fileURL = document.querySelector("#fileURL");
-const copyUrlBtn = document.querySelector("#copyUrlBtn");
+const copyURLBtn = document.querySelector("#copyUrlBtn");
 
 const emailForm = document.querySelector("#emailForm");
 
@@ -55,27 +55,6 @@ dropZone.addEventListener("dragleave", (e) => {
   console.log("drag ended");
 });
 
-// file input change and uploader
-fileInput.addEventListener("change", () => {
-  if (fileInput.files[0].size > maxAllowedSize) {
-    showToast("Max file size is 100MB");
-    fileInput.value = ""; // reset the input
-    return;
-  }
-  uploadFile();
-});
-
-// sharing container listenrs
-copyURLBtn.addEventListener("click", () => {
-  fileURL.select();
-  document.execCommand("copy");
-  showToast("Copied to clipboard");
-});
-
-fileURL.addEventListener("click", () => {
-  fileURL.select();
-});
-
 const uploadFile = () => {
   console.log("file added uploading:", files[0]);
 
@@ -116,6 +95,27 @@ const uploadFile = () => {
   xhr.open("POST", uploadURL);
   xhr.send(formData);
 };
+
+// file input change and uploader
+fileInput.addEventListener("change", () => {
+  if (fileInput.files[0].size > maxAllowedSize) {
+    showToast("Max file size is 100MB");
+    fileInput.value = ""; // reset the input
+    return;
+  }
+  uploadFile();
+});
+
+// sharing container listenrs
+copyURLBtn.addEventListener("click", () => {
+  fileURL.select();
+  document.execCommand("copy");
+  showToast("Copied to clipboard");
+});
+
+fileURL.addEventListener("click", () => {
+  fileURL.select();
+});
 
 const onFileUploadSuccess = (res) => {
   fileInput.value = ""; // reset the input
