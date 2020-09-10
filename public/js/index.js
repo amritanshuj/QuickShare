@@ -83,15 +83,15 @@ const uploadFile = () => {
   
   const formData = new FormData();
   formData.append("myfile", files[0]);
-  xhr.open("POST", uploadURL);
-  xhr.send(formData);
 
   //show the uploader
   progressContainer.style.display = "block";
 
   // upload file
   const xhr = new XMLHttpRequest();
-
+  xhr.open("POST", uploadURL);
+  xhr.send(formData);
+  
   // listen for upload progress
   xhr.upload.onprogress = function (event) {
     // find the percentage of uploaded
