@@ -2,15 +2,15 @@ const dropZone = document.querySelector(".drop-zone");
 const fileInput = document.querySelector("#fileInput");
 const browseBtn = document.querySelector("#browseBtn");
 
-const progressContainer = document.querySelector(".progress-container");
 const bgProgress = document.querySelector(".bg-progress");
+const progressPercent = document.querySelector("#progressPercent");
+const progressContainer = document.querySelector(".progress-container");
 const progressBar = document.querySelector(".progress-bar");
-const status = document.querySelector('.status');
+const status = document.querySelector(".status");
 
 const sharingContainer = document.querySelector(".sharing-container");
+const copyURLBtn = document.querySelector("#copyURLBtn");
 const fileURL = document.querySelector("#fileURL");
-const copyURLBtn = document.querySelector("#copyUrlBtn");
-
 const emailForm = document.querySelector("#emailForm");
 
 const toast = document.querySelector(".toast");
@@ -20,6 +20,7 @@ const uploadURL = `${baseURL}/api/files`;
 const emailURL = `${baseURL}/api/files/send`;
 
 const maxAllowedSize = 100 * 1024 * 1024; //100mb
+
 
 browseBtn.addEventListener("click", () => {
   fileInput.click();
@@ -55,11 +56,31 @@ dropZone.addEventListener("dragleave", (e) => {
   console.log("drag ended");
 });
 
+// file input change and uploader
+fileInput.addEventListener("change", () => {
+  if (fileInput.files[0].size > maxAllowedSize) {
+    showToast("Max file size is 100MB");
+    fileInput.value = ""; // reset the input
+    return;
+  }
+  uploadFile();
+});
+
+// sharing container listenrs
+copyURLBtn.addEventListener("click", () => {
+  fileURL.select();
+  document.execCommand("copy");
+  showToast("Copied to clipboard");
+});
+
+fileURL.addEventListener("click", () => {
+  fileURL.select();
+});
+
 const uploadFile = () => {
-  console.log("file added uploading:", files[0]);
+  console.log("file added uploading");
 
   files = fileInput.files;
-
   const formData = new FormData();
   formData.append("myfile", files[0]);
 
@@ -73,7 +94,7 @@ const uploadFile = () => {
   xhr.upload.onprogress = function (event) {
     // find the percentage of uploaded
     let percent = Math.round((100 * event.loaded) / event.total);
-    progressPercent.innerText = percentDiv;
+    progressPercent.innerText = percent;
     const scaleX = `scaleX(${percent / 100})`;
     bgProgress.style.transform = scaleX;
     progressBar.style.transform = scaleX;
@@ -95,27 +116,6 @@ const uploadFile = () => {
   xhr.open("POST", uploadURL);
   xhr.send(formData);
 };
-
-// file input change and uploader
-fileInput.addEventListener("change", () => {
-  if (fileInput.files[0].size > maxAllowedSize) {
-    showToast("Max file size is 100MB");
-    fileInput.value = ""; // reset the input
-    return;
-  }
-  uploadFile();
-});
-
-// sharing container listenrs
-copyURLBtn.addEventListener("click", () => {
-  fileURL.select();
-  document.execCommand("copy");
-  showToast("Copied to clipboard");
-});
-
-fileURL.addEventListener("click", () => {
-  fileURL.select();
-});
 
 const onFileUploadSuccess = (res) => {
   fileInput.value = ""; // reset the input
@@ -173,4 +173,3 @@ const showToast = (msg) => {
     toast.classList.remove("show");
   }, 2000);
 };
-
