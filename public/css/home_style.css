@@ -268,7 +268,7 @@ body,
 }
 
 footer{
-  padding: 2px;
+  padding: 2.5px;
   height: 1.4rem;
   bottom: 0;
 }
@@ -305,5 +305,10 @@ footer{
   footer{
     font-size: small;
     height: 1rem;
+  }
+
+  .toast{
+    text-align: center;
+    font-size: x-small
   }
 }
