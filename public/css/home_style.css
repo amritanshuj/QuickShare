@@ -268,9 +268,8 @@ body,
 }
 
 footer{
-  padding: 2.5px;
+  padding: 2px;
   height: 1.4rem;
-  font-size: small;
   bottom: 0;
 }
 
@@ -302,5 +301,9 @@ footer{
   }
   .email-container .filed {
     width: 300px;
+  }
+  footer{
+    font-size: small;
+    height: 1rem;
   }
 }
