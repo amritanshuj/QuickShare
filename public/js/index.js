@@ -78,9 +78,9 @@ fileURL.addEventListener("click", () => {
 });
 
 const uploadFile = () => {
-  console.log("file added uploading");
-
   files = fileInput.files;
+  console.log("file added uploading:", files[0]);
+  
   const formData = new FormData();
   formData.append("myfile", files[0]);
 
