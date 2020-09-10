@@ -250,7 +250,7 @@ body,
 
 .toast {
   position: absolute;
-  bottom: 10px;
+  bottom: 100px;
   right: 50%;
   transform: translate(50%, 60px);
   padding: 10px 20px;
@@ -265,6 +265,29 @@ body,
 
 .show.toast {
   transform: translate(50%, 0);
+}
+
+footer{
+  padding: 2.5px;
+  height: 1rem;
+  font-size: small;
+  bottom: 0;
+}
+
+
+footer a{
+    color: white; 
+}
+footer a:hover {
+    color: rgb(49, 111, 226); 
+}
+
+footer{
+  text-align: start;
+  background-color: #070708;
+  color: white;
+  width: 100vw;
+  position: fixed;
 }
 
 @media screen and (max-width: 900px) {
