@@ -127,7 +127,7 @@ const onFileUploadSuccess = (res) => {
   progressContainer.style.display = "none"; // hide the box
 
   const { file: url } = JSON.parse(res);
-  console.log(url);
+  console.log(res);
   sharingContainer.style.display = "block";
   fileURL.value = url;
 };
