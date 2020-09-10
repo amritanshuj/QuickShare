@@ -83,6 +83,8 @@ const uploadFile = () => {
   
   const formData = new FormData();
   formData.append("myfile", files[0]);
+  xhr.open("POST", uploadURL);
+  xhr.send(formData);
 
   //show the uploader
   progressContainer.style.display = "block";
@@ -107,15 +109,13 @@ const uploadFile = () => {
   };
 
   // listen for response which will give the link
-  xhr.open("POST", uploadURL);
-  
   xhr.onreadystatechange = function () {
     if (xhr.readyState == XMLHttpRequest.DONE) {
       onFileUploadSuccess(xhr.responseText);
     }
   };
   
-  xhr.send(formData);
+  
 };
 
 const onFileUploadSuccess = (res) => {
