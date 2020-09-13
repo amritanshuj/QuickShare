@@ -24,6 +24,7 @@ const maxAllowedSize = 100 * 1024 * 1024; //100mb
 
 browseBtn.addEventListener("click", () => {
   fileInput.click();
+  toast.style.display = "none";
 });
 
 dropZone.addEventListener("drop", (e) => {
@@ -53,7 +54,7 @@ dropZone.addEventListener("dragover", (e) => {
 dropZone.addEventListener("dragleave", (e) => {
   dropZone.classList.remove("dragged");
 
-  console.log("drag ended");
+//   console.log("drag ended");
 });
 
 // file input change and uploader
@@ -111,6 +112,7 @@ const uploadFile = () => {
   xhr.onreadystatechange = function () {
     if (xhr.readyState == XMLHttpRequest.DONE) {
       onFileUploadSuccess(xhr.responseText);
+      showToast("File Uploaded!");
     }
   };
   
@@ -168,6 +170,7 @@ let toastTimer;
 // the toast function
 const showToast = (msg) => {
   clearTimeout(toastTimer);
+  toast.style.display = "block"
   toast.innerText = msg;
   toast.classList.add("show");
   toastTimer = setTimeout(() => {
