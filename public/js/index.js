@@ -112,7 +112,8 @@ const uploadFile = () => {
   xhr.onreadystatechange = function () {
     if (xhr.readyState == XMLHttpRequest.DONE) {
       onFileUploadSuccess(xhr.responseText);
-      showToast("File Uploaded!");
+      setInterval(() => {showToast("File Uploaded!")}, 1500);
+      toast.style.display = "none"
     }
   };
   
