@@ -112,6 +112,7 @@ const uploadFile = () => {
   xhr.onreadystatechange = function () {
     if (xhr.readyState == XMLHttpRequest.DONE) {
       onFileUploadSuccess(xhr.responseText);
+      showToast('File Uploaded!');
     }
   };
   
@@ -174,5 +175,6 @@ const showToast = (msg) => {
   toast.classList.add("show");
   toastTimer = setTimeout(() => {
     toast.classList.remove("show");
+    toast.style.display = "none"
   }, 2000);
 };
